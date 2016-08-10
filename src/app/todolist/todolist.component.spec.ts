@@ -1,13 +1,10 @@
 import {
     async,
-    // ComponentFixture,
     TestBed
 } from '@angular/core/testing';
 import { Component } from '@angular/core';
-import { FormsModule } from '@angular/forms';
 
-import { Todo } from './todo.model';
-import { TodolistComponent } from './todolist.component';
+import { Todo, TodolistComponent, TodolistModule } from './index';
 
 @Component({
     selector: 'as-test',
@@ -24,7 +21,7 @@ describe('TodolistComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [ TestComponent ],
-            imports: [ FormsModule ]
+            imports: [ TodolistModule ]
         });
     });
 

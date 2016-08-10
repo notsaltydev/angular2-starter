@@ -6,18 +6,11 @@ import {
     TestBed,
     ComponentFixture
 } from '@angular/core/testing';
-import { provideRoutes, RouterConfig } from '@angular/router';
+import { provideRoutes, Routes } from '@angular/router';
 import { Component } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { NavbarComponent } from './shared/navbar/navbar.component';
-
-@Component({
-    selector: 'as-test',
-    template: '<div><as-main-app></as-main-app></div>'
-})
-class TestComponent {
-}
 
 @Component({
     selector: 'as-test-cmp',
@@ -26,7 +19,7 @@ class TestComponent {
 class TestRouterComponent {
 }
 
-let config: RouterConfig = [
+let config: Routes = [
     {
         path: '', component: TestRouterComponent
     }
@@ -36,7 +29,6 @@ describe('AppComponent', () => {
     beforeEach(() => {
         TestBed.configureTestingModule({
             declarations: [
-                TestComponent,
                 TestRouterComponent,
                 AppComponent,
                 NavbarComponent
@@ -48,8 +40,10 @@ describe('AppComponent', () => {
 
     it('should have title Hello world', async(() => {
         TestBed.compileComponents().then(() => {
-            let fixture: ComponentFixture<TestComponent> = TestBed.createComponent(TestComponent);
+            let fixture: ComponentFixture<AppComponent>;
+            fixture = TestBed.createComponent(AppComponent);
             fixture.detectChanges();
+
             let compiled = fixture.debugElement.nativeElement;
             expect(compiled).toBeDefined();
             // expect(compiled.querySelector('div.title')).toMatch('Hello world');
