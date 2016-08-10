@@ -1,70 +1,59 @@
 import {
-    Router,
-    RouterConfig,
-    ActivatedRoute,
-    RouterOutletMap,
-    UrlSerializer,
-    DefaultUrlSerializer
-} from '@angular/router';
+    RouterTestingModule
+} from '@angular/router/testing';
 import {
     async,
-    inject,
-    addProviders,
+    TestBed,
     ComponentFixture
 } from '@angular/core/testing';
-import { TestComponentBuilder } from '@angular/compiler/testing';
-import { Component, ComponentResolver, Injector } from '@angular/core';
-import { Location, LocationStrategy } from '@angular/common';
-import { SpyLocation } from '@angular/common/testing';
+import { provideRoutes, RouterConfig } from '@angular/router';
+import { Component } from '@angular/core';
 
 import { AppComponent } from './app.component';
-import { HomeComponent } from './home/home.component';
+import { NavbarComponent } from './shared/navbar/navbar.component';
 
 @Component({
     selector: 'as-test',
-    template: '<div><as-main-app></as-main-app></div>',
-    directives: [AppComponent]
+    template: '<div><as-main-app></as-main-app></div>'
 })
 class TestComponent {
 }
 
+@Component({
+    selector: 'as-test-cmp',
+    template: '<div class="title">Hello test</div>'
+})
+class TestRouterComponent {
+}
+
 let config: RouterConfig = [
-    {path: '', component: HomeComponent},
+    {
+        path: '', component: TestRouterComponent
+    }
 ];
 
-// TODO: Use ROUTER_FAKE_PROVIDERS when it's available
 describe('AppComponent', () => {
     beforeEach(() => {
-        addProviders([
-            RouterOutletMap,
-            {provide: LocationStrategy, useClass: SpyLocation},
-            {provide: UrlSerializer, useClass: DefaultUrlSerializer},
-            {provide: Location, useClass: SpyLocation},
-            {
-                provide: Router,
-                useFactory: (
-                    resolver: ComponentResolver,
-                    urlSerializer: UrlSerializer,
-                    outletMap: RouterOutletMap,
-                    location: Location,
-                    injector: Injector) => {
-                        const r = new Router(TestComponent, resolver, urlSerializer, outletMap, location, injector, config);
-                        return r;
-                },
-                deps: [ComponentResolver, UrlSerializer, RouterOutletMap, Location, Injector]
-            },
-            {provide: ActivatedRoute, useFactory: (r: Router) => r.routerState.root, deps: [Router]},
-        ]);
+        TestBed.configureTestingModule({
+            declarations: [
+                TestComponent,
+                TestRouterComponent,
+                AppComponent,
+                NavbarComponent
+            ],
+            imports: [ RouterTestingModule ],
+            providers: [ provideRoutes(config) ]
+        });
     });
 
-    it('should have brand Angular 2 Starter', async(inject([TestComponentBuilder],
-        (tsb: TestComponentBuilder) => {
-            tsb.createAsync(TestComponent).then((fixture: ComponentFixture<TestComponent>) => {
-                fixture.detectChanges();
-                let compiled = fixture.debugElement.nativeElement;
-                expect(compiled).toBeDefined();
-                expect(compiled.querySelector('a.navbar-brand'))
-                    .toContainText('Angular 2 Starter');
-            });
-        })));
+    it('should have title Hello world', async(() => {
+        TestBed.compileComponents().then(() => {
+            let fixture: ComponentFixture<TestComponent> = TestBed.createComponent(TestComponent);
+            fixture.detectChanges();
+            let compiled = fixture.debugElement.nativeElement;
+            expect(compiled).toBeDefined();
+            console.log(compiled);
+            // expect(compiled.querySelector('div.title')).toMatch('Hello world');
+        });
+    }));
 });
