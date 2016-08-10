@@ -52,7 +52,6 @@ describe('AppComponent', () => {
             fixture.detectChanges();
             let compiled = fixture.debugElement.nativeElement;
             expect(compiled).toBeDefined();
-            console.log(compiled);
             // expect(compiled.querySelector('div.title')).toMatch('Hello world');
         });
     }));

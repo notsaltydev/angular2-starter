@@ -11,8 +11,8 @@ import { TodolistComponent } from './todolist/todolist.component';
 
 @NgModule({
     declarations: [
-        AppComponent,
         NavbarComponent,
+        AppComponent,
         HomeComponent,
         TodolistComponent
     ],
